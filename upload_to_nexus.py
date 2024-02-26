@@ -38,8 +38,8 @@ def download_file_from_jfrog(file_url):
         return None
     
 def ensure_repo_exists(repo_name, repo_type):
-    if not repo_exists(repo_name, nexus_session):
-        create_repo(repo_name, repo_type, nexus_session)
+    if not repo_exists(repo_name):
+        create_repo(repo_name, repo_type)
     else:
         print(f"Repository {repo_name} already exists.")
 
