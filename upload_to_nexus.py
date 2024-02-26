@@ -48,7 +48,7 @@ def upload_file_to_nexus(repo_name, file_path, file_content, content_type='appli
     if response.status_code in [200, 201]:
         print(f"Successfully uploaded {file_path} to Nexus.")
     else:
-        raise Exception(f"Failed to upload {file_path} to Nexus: {response.status_code}, {response.text}")
+        logging.error(f"Failed to upload {file_path} to Nexus: {response.status_code}, {response.text}")
 
 def upload_to_nexus(repo_name, repo_type, package_list):
     """Upload package list from JFrog to Nexus"""
