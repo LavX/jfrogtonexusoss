@@ -39,8 +39,6 @@ def download_file_from_jfrog(file_url):
 
 def upload_file_to_nexus(repo_name, file_path, file_content, content_type='application/octet-stream'):
     """Upload a file to a Nexus repository"""
-    if file_content is None:
-        raise ValueError("No file content to upload.")
     nexus_file_url = f"{NEXUS_URL}/repository/{repo_name}/{file_path}"
     headers = {'Content-Type': content_type}
     try:
