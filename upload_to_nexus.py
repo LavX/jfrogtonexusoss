@@ -1,5 +1,6 @@
 import requests
 import logging
+from create_repo_nexus import repo_exists, create_repo
 from env_config import NEXUS_URL, NEXUS_USER, NEXUS_PASSWORD, JFROG_URL, JFROG_USER, JFROG_PASSWORD
 from requests.auth import HTTPBasicAuth
 
@@ -35,7 +36,12 @@ def download_file_from_jfrog(file_url):
     except Exception as e:
         logging.error(f"Exception during file download from JFrog: {e} - URL: {file_url}")
         return None
-
+    
+def ensure_repo_exists(repo_name, repo_type):
+    if not repo_exists(repo_name, nexus_session):
+        create_repo(repo_name, repo_type, nexus_session)
+    else:
+        print(f"Repository {repo_name} already exists.")
 
 def upload_file_to_nexus(repo_name, file_path, file_content, content_type='application/octet-stream'):
     """Upload a file to a Nexus repository"""
@@ -54,6 +60,7 @@ def upload_file_to_nexus(repo_name, file_path, file_content, content_type='appli
 
 def upload_to_nexus(repo_name, repo_type, package_list):
     """Upload package list from JFrog to Nexus"""
+    ensure_repo_exists(repo_name, repo_type)
     for file_url in package_list:
         file_path = '/'.join(file_url.split('/')[len(JFROG_URL.split('/')):])
         if not file_exists_in_nexus(repo_name, file_path):
