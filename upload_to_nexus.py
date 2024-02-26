@@ -47,16 +47,18 @@ def upload_file_to_nexus(repo_name, file_path, file_content, content_type='appli
     """Upload a file to a Nexus repository"""
     nexus_file_url = f"{NEXUS_URL}/repository/{repo_name}/{file_path}"
     headers = {'Content-Type': content_type}
+    response = None 
     try:
         response = nexus_session.put(nexus_file_url, data=file_content, headers=headers)
+        if response.status_code in [200, 201]:
+            print(f"Successfully uploaded {file_path} to Nexus.")
+        else:
+            print(f"Failed to upload {file_path} to Nexus: {response.status_code}, {response.text}")
+            logging.error(f"Failed to upload {file_path} to Nexus: {response.status_code}, {response.text}")
     except Exception as e:
-        print(f"Exception during file upload to Nexus: {e}")
-        logging.error(f"Exception during file upload to Nexus: {e} - URL: {nexus_file_url}")
-    if response.status_code in [200, 201]:
-        print(f"Successfully uploaded {file_path} to Nexus.")
-    else:
-        print(f"Failed to upload {file_path} to Nexus: {response.status_code}, {response.text}")
-        logging.error(f"Failed to upload {file_path} to Nexus: {response.status_code}, {response.text}")
+        error_message = f"Exception during file upload to Nexus: {e} - URL: {nexus_file_url}"
+        print(error_message)
+        logging.error(error_message)
 
 def upload_to_nexus(repo_name, repo_type, package_list):
     """Upload package list from JFrog to Nexus"""
