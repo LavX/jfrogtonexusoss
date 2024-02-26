@@ -43,7 +43,10 @@ def upload_file_to_nexus(repo_name, file_path, file_content, content_type='appli
         raise ValueError("No file content to upload.")
     nexus_file_url = f"{NEXUS_URL}/repository/{repo_name}/{file_path}"
     headers = {'Content-Type': content_type}
-    response = nexus_session.put(nexus_file_url, data=file_content, headers=headers)
+    try:
+        response = nexus_session.put(nexus_file_url, data=file_content, headers=headers)
+    except Exception as e:
+        logging.error(f"Exception during file upload to Nexus: {e} - URL: {nexus_file_url}")
     if response.status_code in [200, 201]:
         print(f"Successfully uploaded {file_path} to Nexus.")
     else:
