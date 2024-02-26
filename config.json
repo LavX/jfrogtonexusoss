@@ -1,0 +1,15 @@
+[
+    {
+      "name": "stable-yum-repos",
+      "type": "rpm"
+    },
+    {
+      "name": "stable-deb-repos",
+      "type": "debian"
+    },
+    {
+      "name": "my-maven-repos",
+      "type": "maven"
+    }
+  ]
+  
