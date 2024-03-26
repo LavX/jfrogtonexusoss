@@ -64,10 +64,9 @@ def upload_to_nexus(repo_name, repo_type, package_list):
     """Upload package list from JFrog to Nexus"""
     ensure_repo_exists(repo_name, repo_type)
     for file_url in package_list:
-        file_path = '/'.join(file_url.split('/')[len(JFROG_URL.split('/')):])
+        file_path = '/'.join(file_url.split('/')[len(JFROG_URL.split('/')):])[len(repo_name)+1:]
         if not file_exists_in_nexus(repo_name, file_path):
             file_content = download_file_from_jfrog(file_url)
-            # Example to handle different content types, adjust as needed
             if repo_type == 'maven':
                 content_type = 'application/xml'
             elif repo_type in ['yum', 'apt']:
